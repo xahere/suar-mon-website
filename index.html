@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Random Suar-mon Landing Page</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            height: 100vh;
+            background-color: #eef2f3;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        #creatureCanvas {
+            border: 2px solid #333;
+            background-color: #fff;
+        }
+        #creatureName {
+            margin-top: 20px;
+            font-size: 1.5em;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Welcome to Suar-mon World!</h1>
+<canvas id="creatureCanvas" width="400" height="400"></canvas>
+<div id="creatureName"></div>
+
+<script>
+    function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min)) + min;
+    }
+
+    function generateName() {
+        const syllables = ['su', 'ar', 'mon', 'ki', 'za', 'lo', 'ne', 'pa', 'ri', 'ta'];
+        let name = '';
+        const nameLength = getRandomInt(2, 4);
+        for (let i = 0; i < nameLength; i++) {
+            name += syllables[getRandomInt(0, syllables.length)];
+        }
+        return name.charAt(0).toUpperCase() + name.slice(1);
+    }
+
+    function drawCreature() {
+        const canvas = document.getElementById('creatureCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Clear the canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Random colors
+        const bodyColor = `hsl(${getRandomInt(0, 360)}, 70%, 60%)`;
+        const featureColor = `hsl(${getRandomInt(0, 360)}, 70%, 50%)`;
+
+        // Random body parameters
+        const bodyWidth = getRandomInt(150, 250);
+        const bodyHeight = getRandomInt(150, 250);
+        const bodyX = (canvas.width - bodyWidth) / 2;
+        const bodyY = (canvas.height - bodyHeight) / 2;
+
+        // Draw body (ellipse)
+        ctx.fillStyle = bodyColor;
+        ctx.beginPath();
+        ctx.ellipse(bodyX + bodyWidth / 2, bodyY + bodyHeight / 2, bodyWidth / 2, bodyHeight / 2, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Random eye parameters
+        const eyeSize = getRandomInt(10, 30);
+        const eyeOffsetX = bodyWidth * 0.2;
+        const eyeY = bodyY + bodyHeight * 0.4;
+
+        // Draw eyes
+        ctx.fillStyle = '#fff';
+        // Left eye
+        ctx.beginPath();
+        ctx.arc(bodyX + eyeOffsetX, eyeY, eyeSize, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#000';
+        ctx.beginPath();
+        ctx.arc(bodyX + eyeOffsetX, eyeY, eyeSize / 2, 0, Math.PI * 2);
+        ctx.fill();
+        // Right eye
+        ctx.fillStyle = '#fff';
+        ctx.beginPath();
+        ctx.arc(bodyX + bodyWidth - eyeOffsetX, eyeY, eyeSize, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#000';
+        ctx.beginPath();
+        ctx.arc(bodyX + bodyWidth - eyeOffsetX, eyeY, eyeSize / 2, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Random mouth parameters
+        const mouthWidth = getRandomInt(40, bodyWidth * 0.6);
+        const mouthHeight = getRandomInt(10, 20);
+        const mouthX = bodyX + (bodyWidth - mouthWidth) / 2;
+        const mouthY = bodyY + bodyHeight * 0.65;
+
+        // Draw mouth
+        ctx.fillStyle = featureColor;
+        ctx.fillRect(mouthX, mouthY, mouthWidth, mouthHeight);
+
+        // Random feature (antennae, horns, or none)
+        const featureType = getRandomInt(1, 4); // 1: antennae, 2: horns, 3: none
+        ctx.strokeStyle = featureColor;
+        ctx.fillStyle = featureColor;
+        ctx.lineWidth = 5;
+
+        if (featureType === 1) {
+            // Draw antennae
+            ctx.beginPath();
+            ctx.moveTo(bodyX + bodyWidth * 0.3, bodyY);
+            ctx.lineTo(bodyX + bodyWidth * 0.3, bodyY - 50);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(bodyX + bodyWidth * 0.7, bodyY);
+            ctx.lineTo(bodyX + bodyWidth * 0.7, bodyY - 50);
+            ctx.stroke();
+        } else if (featureType === 2) {
+            // Draw horns
+            ctx.beginPath();
+            ctx.moveTo(bodyX + bodyWidth * 0.3, bodyY);
+            ctx.lineTo(bodyX + bodyWidth * 0.2, bodyY - 40);
+            ctx.lineTo(bodyX + bodyWidth * 0.3, bodyY);
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.moveTo(bodyX + bodyWidth * 0.7, bodyY);
+            ctx.lineTo(bodyX + bodyWidth * 0.8, bodyY - 40);
+            ctx.lineTo(bodyX + bodyWidth * 0.7, bodyY);
+            ctx.fill();
+        }
+
+        // Generate and display the creature's name
+        const creatureName = generateName();
+        document.getElementById('creatureName').innerText = 'Meet ' + creatureName + '!';
+    }
+
+    // Draw the creature when the page loads
+    window.onload = drawCreature;
+</script>
+
+</body>
+</html>
